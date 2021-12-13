@@ -213,14 +213,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="netty简介"><a href="#netty简介" class="headerlink" title="netty简介"></a>netty简介</h2><p>###Channel<br>Channel 双向数据通道，可以向通道中读写</p>
+        <h2 id="netty简介"><a href="#netty简介" class="headerlink" title="netty简介"></a>netty简介</h2><h3 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h3><p>Channel 双向数据通道，可以向通道中读写</p>
 <ul>
 <li>FileChannel  -&gt; 文件传输</li>
 <li>DatagramChannel -&gt; UDP</li>
 <li>ServerSocketChannel -&gt;TCP 只用于服务器</li>
 <li>SocketChannel -&gt;TCP   服务器客户端都用到</li>
 </ul>
-<p>###Buffer<br>Buffer 数据暂存缓冲区<br>怎么知道是读模式还是写模式呢?<br>无论哪种模式position=limit 进行读写会异常，所有读之前必须flip() ,读完再写入必须clear()</p>
+<h3 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h3><p>Buffer 数据暂存缓冲区<br>怎么知道是读模式还是写模式呢?<br>无论哪种模式position=limit 进行读写会异常，所有读之前必须flip() ,读完再写入必须clear()</p>
 <ul>
 <li>Capacity </li>
 <li>Position </li>
@@ -233,7 +233,7 @@
 <li>1 2 已读 </li>
 <li>3 4 3 4 position=2  从第二个3开始写</li>
 </ul>
-<p>####读方法 rewind()     mark() and reset()<br>Rewind()  position=0<br>Mark() mark =position标记当前位置<br>Reset() position=mark 从mark开始读</p>
+<h4 id="读方法-rewind-mark-and-reset"><a href="#读方法-rewind-mark-and-reset" class="headerlink" title="读方法 rewind()     mark() and reset()"></a>读方法 rewind()     mark() and reset()</h4><p>Rewind()  position=0<br>Mark() mark =position标记当前位置<br>Reset() position=mark 从mark开始读</p>
 <h4 id="字符串和ByteBuffer转换-三种方式"><a href="#字符串和ByteBuffer转换-三种方式" class="headerlink" title="字符串和ByteBuffer转换 三种方式"></a>字符串和ByteBuffer转换 三种方式</h4><ul>
 <li>直接放入byte数组   </li>
 <li>StandardCharsets.encode()   -&gt;自动调用flip()切换到读模式</li>
@@ -249,8 +249,7 @@
 </code></pre>
 </li>
 </ul>
-<p>###Selector<br>####单线程模式 </p>
-<ul>
+<h3 id="Selector"><a href="#Selector" class="headerlink" title="Selector"></a>Selector</h3><h4 id="单线程模式"><a href="#单线程模式" class="headerlink" title="单线程模式"></a>单线程模式</h4><ul>
 <li>阻塞模式下阻塞方法之间相互影响，不能正常处理多个连接</li>
 <li>非阻塞模式下cpu占用高空轮询</li>
 </ul>
@@ -266,7 +265,7 @@
 </ul>
 <h4 id="Selector-版本-多路复用模式"><a href="#Selector-版本-多路复用模式" class="headerlink" title="Selector 版本(多路复用模式)"></a>Selector 版本(多路复用模式)</h4><p>Selector 配合一个线程管理多个channel 过去channel上的事件，这些channel工作在非阻塞模式下，不会一直占用<br>线程</p>
 <p>Accept -服务端有连接请求时触发<br>Connect - 客户端连接建立后触发的<br>Read -可读<br>Write-可写</p>
-<p>###零拷贝<br>零拷贝指的是数据无需拷贝到 JVM 内存（用户缓冲区如byte[] ByteBuffer）中，同时具有以下三个优点</p>
+<h3 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h3><p>零拷贝指的是数据无需拷贝到 JVM 内存（用户缓冲区如byte[] ByteBuffer）中，同时具有以下三个优点</p>
 <ul>
 <li>更少的用户态与内核态的切换</li>
 <li>不利用 cpu 计算</li>
@@ -278,12 +277,13 @@
 <p>4.接下来要向网卡写数据，这项能力 Java 又不具备，因此又得从用户态切换至内核态，调用操作系统的写能力，使用 DMA 将 socket 缓冲区的数据写入网卡，不会使用 CPU</p>
 <p>可以看到中间环节较多，java 的 IO 实际不是物理设备级别的读写，而是缓存的复制，底层的真正读写是操作系统来完成的</p>
 <p>用户态与内核态的切换发生了 3 次，这个操作比较重量级<br>数据拷贝了共 4 次</p>
-<p>####NIO 优化<br>通过 DirectByteBuf<br>减少了一次数据拷贝，用户态与内核态的切换次数没有减少<br>进一步优化1<br>以下两种方式都是零拷贝，即无需将数据拷贝到用户缓冲区中（JVM内存中）</p>
+<h4 id="NIO-优化"><a href="#NIO-优化" class="headerlink" title="NIO 优化"></a>NIO 优化</h4><p>通过 DirectByteBuf<br>减少了一次数据拷贝，用户态与内核态的切换次数没有减少<br>进一步优化1<br>以下两种方式都是零拷贝，即无需将数据拷贝到用户缓冲区中（JVM内存中）</p>
 <p>底层采用了 linux 2.1 后提供的 sendFile 方法，Java 中对应着两个 channel 调用 transferTo/transferFrom 方法拷贝数据</p>
 <p>Java 调用 transferTo 方法后，要从 Java 程序的用户态切换至内核态，使用 DMA将数据读入内核缓冲区，不会使用 CPU</p>
 <p>数据从内核缓冲区传输到 socket 缓冲区，CPU 会参与拷贝</p>
 <p>最后使用 DMA 将 socket 缓冲区的数据写入网卡，不会使用 CPU</p>
-<p>这种方法下只发生了1次用户态与内核态的切换<br>数据拷贝了 3 次<br>####进一步优化2<br>linux 2.4 对上述方法再次进行了优化</p>
+<p>这种方法下只发生了1次用户态与内核态的切换<br>数据拷贝了 3 次</p>
+<h4 id="进一步优化2"><a href="#进一步优化2" class="headerlink" title="进一步优化2"></a>进一步优化2</h4><p>linux 2.4 对上述方法再次进行了优化</p>
 <p>Java 调用 transferTo 方法后，要从 Java 程序的用户态切换至内核态，使用 DMA将数据读入内核缓冲区，不会使用 CPU</p>
 <p>只会将一些 offset 和 length 信息拷入 socket 缓冲区，几乎无消耗</p>
 <p>使用 DMA 将 内核缓冲区的数据写入网卡，不会使用 CPU</p>
