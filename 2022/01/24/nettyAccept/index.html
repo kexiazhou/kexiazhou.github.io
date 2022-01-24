@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>nettyAccept | 周可霞的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="netty 启动接受新连接步骤 selector.select()阻塞直到有事件发生 遍历处理selectedKeys 判断事件类型是否是accept 创建SocketChannel,设置为非阻塞 将SocketChannel注册到selector上 关注read事件  ##每一步对应的代码 123456判断事件类型是否是acceptNioEventLoop 里processSelectedKey">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nettyAccept">
+<meta property="og:url" content="https://kexiazhou.github.io/2022/01/24/nettyAccept/index.html">
+<meta property="og:site_name" content="周可霞的博客">
+<meta property="og:description" content="netty 启动接受新连接步骤 selector.select()阻塞直到有事件发生 遍历处理selectedKeys 判断事件类型是否是accept 创建SocketChannel,设置为非阻塞 将SocketChannel注册到selector上 关注read事件  ##每一步对应的代码 123456判断事件类型是否是acceptNioEventLoop 里processSelectedKey">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-01-24T06:52:17.000Z">
+<meta property="article:modified_time" content="2022-01-24T08:32:17.748Z">
+<meta property="article:author" content="KeXia Zhou">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="周可霞的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">周可霞的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://kexiazhou.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-nettyAccept" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/01/24/nettyAccept/" class="article-date">
+  <time datetime="2022-01-24T06:52:17.000Z" itemprop="datePublished">2022-01-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      nettyAccept
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="netty-启动接受新连接"><a href="#netty-启动接受新连接" class="headerlink" title="netty 启动接受新连接"></a>netty 启动接受新连接</h1><h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ul>
+<li>selector.select()阻塞直到有事件发生</li>
+<li>遍历处理selectedKeys</li>
+<li>判断事件类型是否是accept</li>
+<li>创建SocketChannel,设置为非阻塞</li>
+<li>将SocketChannel注册到selector上</li>
+<li>关注read事件</li>
+</ul>
+<p>##每一步对应的代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">判断事件类型是否是accept</span><br><span class="line">NioEventLoop 里processSelectedKey</span><br><span class="line">if ((readyOps &amp; (SelectionKey.OP_READ | SelectionKey.OP_ACCEPT)) != 0 || readyOps == 0) &#123;</span><br><span class="line">                unsafe.read();</span><br><span class="line"> &#125;</span><br><span class="line">unsafe类型 AbstractNioMessageChannel</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">创建SocketChannel,设置为非阻塞</span><br><span class="line">NioMessageUnsafe read() </span><br><span class="line">NioServerSocketChannel doReadMessages</span><br><span class="line"> @Override</span><br><span class="line"> protected int doReadMessages(List&lt;Object&gt; buf) throws Exception &#123;</span><br><span class="line">     SocketChannel ch = SocketUtils.accept(javaChannel());</span><br><span class="line"></span><br><span class="line">     try &#123;</span><br><span class="line">         if (ch != null) &#123;</span><br><span class="line">             buf.add(new NioSocketChannel(this, ch));</span><br><span class="line">             return 1;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125; catch (Throwable t) &#123;</span><br><span class="line">         logger.warn(&quot;Failed to create a new channel from an accepted socket.&quot;, t);</span><br><span class="line"></span><br><span class="line">         try &#123;</span><br><span class="line">             ch.close();</span><br><span class="line">         &#125; catch (Throwable t2) &#123;</span><br><span class="line">             logger.warn(&quot;Failed to close a socket.&quot;, t2);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     return 0;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">将SocketChannel注册到selector上</span><br><span class="line">pipeline.fireChannelRead(readBuf.get(i));</span><br><span class="line">NioServerSocketChannel的pipeline流水线操作，实际处理是由ServerBootstrapAcceptor 的channelRead</span><br><span class="line">        public void channelRead(ChannelHandlerContext ctx, Object msg) &#123;</span><br><span class="line">            final Channel child = (Channel) msg;</span><br><span class="line"></span><br><span class="line">            child.pipeline().addLast(childHandler);</span><br><span class="line"></span><br><span class="line">            setChannelOptions(child, childOptions, logger);</span><br><span class="line"></span><br><span class="line">            for (Entry&lt;AttributeKey&lt;?&gt;, Object&gt; e: childAttrs) &#123;</span><br><span class="line">                child.attr((AttributeKey&lt;Object&gt;) e.getKey()).set(e.getValue());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            try &#123;</span><br><span class="line">                childGroup.register(child).addListener(new ChannelFutureListener() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void operationComplete(ChannelFuture future) throws Exception &#123;</span><br><span class="line">                        if (!future.isSuccess()) &#123;</span><br><span class="line">                            forceClose(child, future.cause());</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125; catch (Throwable t) &#123;</span><br><span class="line">                forceClose(child, t);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">        register方法里线程切换</span><br><span class="line">            if (eventLoop.inEventLoop()) &#123;</span><br><span class="line">                register0(promise);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    eventLoop.execute(new Runnable() &#123;</span><br><span class="line">                        @Override</span><br><span class="line">                        public void run() &#123;</span><br><span class="line">                            register0(promise);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line">                &#125; catch (Throwable t) &#123;</span><br><span class="line">                    logger.warn(</span><br><span class="line">                            &quot;Force-closing a channel whose registration task was not accepted by an event loop: &#123;&#125;&quot;,</span><br><span class="line">                            AbstractChannel.this, t);</span><br><span class="line">                    closeForcibly();</span><br><span class="line">                    closeFuture.setClosed();</span><br><span class="line">                    safeSetFailure(promise, t);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            register0里doRegister(); 完成NioSocketChannel注册到seletor上，无关注事件</span><br><span class="line">            pipeline.invokeHandlerAddedIfNeeded(); 构建NioSocketChannel的pipeline</span><br><span class="line">            将hangler添加到pipeline</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">关注read事件  层层调用最后 在AbstractNioChannel类</span><br><span class="line">    protected void doBeginRead() throws Exception &#123;</span><br><span class="line">        // Channel.read() or ChannelHandlerContext.read() was called</span><br><span class="line">        final SelectionKey selectionKey = this.selectionKey;</span><br><span class="line">        if (!selectionKey.isValid()) &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        readPending = true;</span><br><span class="line"></span><br><span class="line">        final int interestOps = selectionKey.interestOps();</span><br><span class="line">        if ((interestOps &amp; readInterestOp) == 0) &#123;</span><br><span class="line">            selectionKey.interestOps(interestOps | readInterestOp);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    其中readInterestOp 是在构建NioSocketChannel时设置的OP_READ</span><br><span class="line">    protected AbstractNioByteChannel(Channel parent, SelectableChannel ch) &#123;</span><br><span class="line">            super(parent, ch, SelectionKey.OP_READ);</span><br><span class="line">    &#125;   </span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://kexiazhou.github.io/2022/01/24/nettyAccept/" data-id="ckysflzuz0004dwasf8o84vg2" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2022/01/11/nettyBoot/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">nettyBoot</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/01/24/nettyAccept/">nettyAccept</a>
+          </li>
+        
+          <li>
+            <a href="/2022/01/11/nettyBoot/">nettyBoot</a>
+          </li>
+        
+          <li>
+            <a href="/2021/12/13/nio/">NIO</a>
+          </li>
+        
+          <li>
+            <a href="/2021/10/28/hexo/">hexo搭建教程</a>
+          </li>
+        
+          <li>
+            <a href="/2021/10/27/diary/">diary</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 KeXia Zhou<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
