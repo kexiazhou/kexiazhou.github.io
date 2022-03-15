@@ -16,15 +16,15 @@
   <meta name="author" content="KeXia Zhou">
   <meta name="keywords" content="">
   
-    <meta name="description" content="基本使用 SpringBoot快速入门 SpringBoot基础配置 基于SpringBoot整合SSMP  几种搭建SpringBoot的方式 idea中根据向导进行联网快速制作 SpringBoot官网制作 选择start来源为自定义URL http:&#x2F;&#x2F;start.aliyun.com或https:&#x2F;&#x2F;start.aliyun.com 手动创建一个maven工程，改造成sprinboot（1">
+    <meta name="description" content="基本使用 SpringBoot快速入门 SpringBoot基础配置 基于SpringBoot整合SSMP  快速入门和基础配置几种搭建SpringBoot的方式 idea中根据向导进行联网快速制作 SpringBoot官网制作 选择start来源为自定义URL http:&#x2F;&#x2F;start.aliyun.com或https:&#x2F;&#x2F;start.aliyun.com 手动创建一个maven工程，改造成sp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="springboot2">
 <meta property="og:url" content="https://kexiazhou.github.io/2022/03/07/springboot2/index.html">
 <meta property="og:site_name" content="周可霞的博客">
-<meta property="og:description" content="基本使用 SpringBoot快速入门 SpringBoot基础配置 基于SpringBoot整合SSMP  几种搭建SpringBoot的方式 idea中根据向导进行联网快速制作 SpringBoot官网制作 选择start来源为自定义URL http:&#x2F;&#x2F;start.aliyun.com或https:&#x2F;&#x2F;start.aliyun.com 手动创建一个maven工程，改造成sprinboot（1">
+<meta property="og:description" content="基本使用 SpringBoot快速入门 SpringBoot基础配置 基于SpringBoot整合SSMP  快速入门和基础配置几种搭建SpringBoot的方式 idea中根据向导进行联网快速制作 SpringBoot官网制作 选择start来源为自定义URL http:&#x2F;&#x2F;start.aliyun.com或https:&#x2F;&#x2F;start.aliyun.com 手动创建一个maven工程，改造成sp">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-03-07T08:56:00.529Z">
-<meta property="article:modified_time" content="2022-03-07T09:35:40.018Z">
+<meta property="article:modified_time" content="2022-03-15T09:21:36.033Z">
 <meta property="article:author" content="KeXia Zhou">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -196,7 +196,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      624 字
+      953 字
     </span>
   
 
@@ -205,7 +205,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      6 分钟
+      8 分钟
     </span>
   
 
@@ -242,14 +242,14 @@
 <li>SpringBoot基础配置</li>
 <li>基于SpringBoot整合SSMP</li>
 </ul>
-<h2 id="几种搭建SpringBoot的方式"><a href="#几种搭建SpringBoot的方式" class="headerlink" title="几种搭建SpringBoot的方式"></a>几种搭建SpringBoot的方式</h2><ul>
+<h2 id="快速入门和基础配置"><a href="#快速入门和基础配置" class="headerlink" title="快速入门和基础配置"></a>快速入门和基础配置</h2><h3 id="几种搭建SpringBoot的方式"><a href="#几种搭建SpringBoot的方式" class="headerlink" title="几种搭建SpringBoot的方式"></a>几种搭建SpringBoot的方式</h3><ul>
 <li>idea中根据向导进行联网快速制作</li>
 <li>SpringBoot官网制作</li>
 <li>选择start来源为自定义URL <a target="_blank" rel="noopener" href="http://start.aliyun.com或https//start.aliyun.com">http://start.aliyun.com或https://start.aliyun.com</a></li>
 <li>手动创建一个maven工程，改造成sprinboot（1.pom 2.引导类)</li>
 </ul>
 <h3 id="在Idea中隐藏指定文件-文件夹"><a href="#在Idea中隐藏指定文件-文件夹" class="headerlink" title="在Idea中隐藏指定文件/文件夹"></a>在Idea中隐藏指定文件/文件夹</h3><p>【Files】-&gt;【Settings】-&gt;【Editor】-&gt;【File Types】-&gt;【Ignored Files and Folders】</p>
-<h2 id="springboot的pom文件"><a href="#springboot的pom文件" class="headerlink" title="springboot的pom文件"></a>springboot的pom文件</h2><ul>
+<h3 id="springboot的pom文件"><a href="#springboot的pom文件" class="headerlink" title="springboot的pom文件"></a>springboot的pom文件</h3><ul>
 <li>继承spring-boot-starter-parent(SpringBoot统一管理版本减少依赖冲突的)</li>
 <li>实际开发中如果需要用什么技术，先去找有没有这个技术对应的starter (starter可以实现快速配置的效果)<ul>
 <li>如果有对应的starter，直接写starter，而且无需指定版本，版本由parent提供</li>
@@ -257,9 +257,27 @@
 </ul>
 </li>
 </ul>
-<h2 id="springboot中tomcat服务器运行原因"><a href="#springboot中tomcat服务器运行原因" class="headerlink" title="springboot中tomcat服务器运行原因"></a>springboot中tomcat服务器运行原因</h2><p>其实是以对象的形式在Spring容器中运行的(主要是在tomcat-embed-core里)</p>
-<h2 id="更换内嵌Tomcat"><a href="#更换内嵌Tomcat" class="headerlink" title="更换内嵌Tomcat"></a>更换内嵌Tomcat</h2><p>排除掉spring-boot-starter-tomcat 新增一个spring-boot-starter-jetty</p>
-
+<h3 id="springboot中tomcat服务器运行原因"><a href="#springboot中tomcat服务器运行原因" class="headerlink" title="springboot中tomcat服务器运行原因"></a>springboot中tomcat服务器运行原因</h3><p>其实是以对象的形式在Spring容器中运行的(主要是在tomcat-embed-core里)</p>
+<h3 id="更换内嵌Tomcat"><a href="#更换内嵌Tomcat" class="headerlink" title="更换内嵌Tomcat"></a>更换内嵌Tomcat</h3><p>排除掉spring-boot-starter-tomcat 新增一个spring-boot-starter-jetty</p>
+<h3 id="springboot配置文件"><a href="#springboot配置文件" class="headerlink" title="springboot配置文件"></a>springboot配置文件</h3><p>默认是application.properties</p>
+<ul>
+<li>properties格式</li>
+<li>yml格式</li>
+<li>yaml格式</li>
+</ul>
+<p>优先级<br>application.properties  &gt;  application.yml  &gt;  application.yaml<br>相同的按优先级覆盖，不同的都保留</p>
+<h3 id="自动提示功能消失解决方案"><a href="#自动提示功能消失解决方案" class="headerlink" title="自动提示功能消失解决方案"></a>自动提示功能消失解决方案</h3><ul>
+<li>Setting → Project Structure → Facets</li>
+<li>选中对应项目/工程</li>
+<li>Customize Spring Boot</li>
+<li>选择配置文件</li>
+</ul>
+<h3 id="yml数据读取"><a href="#yml数据读取" class="headerlink" title="yml数据读取"></a>yml数据读取</h3><ul>
+<li>@Value 读取单个数据</li>
+<li>@Autowired 自动装配数据到Environment对象中</li>
+<li>@ConfigurationProperties 常用的做法是封装到对象，只加载部分数据</li>
+</ul>
+<h2 id="整合SSMP"><a href="#整合SSMP" class="headerlink" title="整合SSMP"></a>整合SSMP</h2><h1 id="运维"><a href="#运维" class="headerlink" title="运维"></a>运维</h1>
             </div>
             <hr>
             <div>
