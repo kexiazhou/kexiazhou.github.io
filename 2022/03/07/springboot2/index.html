@@ -24,7 +24,7 @@
 <meta property="og:description" content="基本使用 SpringBoot快速入门 SpringBoot基础配置 基于SpringBoot整合SSMP  快速入门和基础配置几种搭建SpringBoot的方式 idea中根据向导进行联网快速制作 SpringBoot官网制作 选择start来源为自定义URL http:&#x2F;&#x2F;start.aliyun.com或https:&#x2F;&#x2F;start.aliyun.com 手动创建一个maven工程，改造成sp">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-03-07T08:56:00.529Z">
-<meta property="article:modified_time" content="2022-03-15T09:21:36.033Z">
+<meta property="article:modified_time" content="2022-03-17T06:40:48.620Z">
 <meta property="article:author" content="KeXia Zhou">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -196,7 +196,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      953 字
+      2.8k 字
     </span>
   
 
@@ -205,7 +205,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      8 分钟
+      24 分钟
     </span>
   
 
@@ -277,7 +277,59 @@
 <li>@Autowired 自动装配数据到Environment对象中</li>
 <li>@ConfigurationProperties 常用的做法是封装到对象，只加载部分数据</li>
 </ul>
-<h2 id="整合SSMP"><a href="#整合SSMP" class="headerlink" title="整合SSMP"></a>整合SSMP</h2><h1 id="运维"><a href="#运维" class="headerlink" title="运维"></a>运维</h1>
+<h2 id="整合SSMP"><a href="#整合SSMP" class="headerlink" title="整合SSMP"></a>整合SSMP</h2><h1 id="运维"><a href="#运维" class="headerlink" title="运维"></a>运维</h1><h3 id="spring-boot-maven-plugin插件用于将当前程序打包成一个可以独立运行的程序包"><a href="#spring-boot-maven-plugin插件用于将当前程序打包成一个可以独立运行的程序包" class="headerlink" title="spring-boot-maven-plugin插件用于将当前程序打包成一个可以独立运行的程序包"></a>spring-boot-maven-plugin插件用于将当前程序打包成一个可以独立运行的程序包</h3><p>为什么可以独立运行呢？</p>
+<ul>
+<li>读取MANIFEST.MF 里的Main-Class jar运行的入口</li>
+<li>org.springframework.boot.loader.JarLauncher运行时会找到Start-Class属性com.itheima.SSMPApplication</li>
+<li>运行启动类启动SpringBoot程序</li>
+<li>依赖的jar包放在lib里</li>
+</ul>
+<h3 id="程序运行时端口占用问题"><a href="#程序运行时端口占用问题" class="headerlink" title="程序运行时端口占用问题"></a>程序运行时端口占用问题</h3><ul>
+<li>查找所有端口使用情况 netstat -ano</li>
+<li>查找指定端口 netstat -ano | findstr “端口号”</li>
+<li>查找PID对应的进程 tasklist | findstr “进程PID号”</li>
+<li>根据进程号杀死进程 taskkill /f /pid “进程PID号”</li>
+<li>根据进程名称杀死进程 taskkill /f /t /im “”  (/f 强制， /t 关联子进程， /im 进程名称)<h3 id="临时属性配置"><a href="#临时属性配置" class="headerlink" title="临时属性配置"></a>临时属性配置</h3></li>
+<li>java –jar springboot.jar –-server.port=80 –logging.level.root=debug</li>
+<li>Program arguments对应的位置就是添加临时属性的</li>
+<li>本质上都是传递到main函数的args数组中</li>
+<li>由于临时属性优先级比较高，超过配置文件，企业开发中通常关闭临时属性入口</li>
+</ul>
+<figure class="highlight arduino"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">String</span>[] args)</span> </span>&#123;<br>SpringApplication.<span class="hljs-built_in">run</span>(SSMPApplication.class);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="4种配置文件"><a href="#4种配置文件" class="headerlink" title="4种配置文件"></a>4种配置文件</h3><ul>
+<li>jar所在目录的config文件里的application.yml 优先级最高 运维经理整体调控</li>
+<li>jar所在目录的application.yml 运维人员</li>
+<li>classpath: config/application.yml 项目经理</li>
+<li>classpath: application.yml 开发</li>
+</ul>
+<h3 id="自定义配置文件"><a href="#自定义配置文件" class="headerlink" title="自定义配置文件"></a>自定义配置文件</h3><ul>
+<li>通过临时参数配置配置文件名称 –spring.config.name=e.properties,b.properties</li>
+<li>通过临时参数配置配置文件路径 –spring.config.location=classpath:/e.yml,classpath:/b.yml</li>
+<li>微服务使用的配置中心管理</li>
+</ul>
+<h3 id="多环境开发推荐使用多文件版本"><a href="#多环境开发推荐使用多文件版本" class="headerlink" title="多环境开发推荐使用多文件版本"></a>多环境开发推荐使用多文件版本</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">spring:</span><br>	<span class="hljs-attr">profiles:</span><br>		<span class="hljs-attr">active:</span> <span class="hljs-string">pro</span>		<span class="hljs-comment"># 启动pro</span><br></code></pre></td></tr></table></figure>
+<p><em><strong>application-pro.yaml</strong></em></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">server:</span><br>	<span class="hljs-attr">port:</span> <span class="hljs-number">80</span><br></code></pre></td></tr></table></figure>
+
+<p><em><strong>application-dev.yaml</strong></em></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">server:</span><br>	<span class="hljs-attr">port:</span> <span class="hljs-number">81</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>主配置文件中设置公共配置（全局）</li>
+<li>环境分类配置文件中常用于设置冲突属性（局部）</li>
+</ul>
+<h3 id="多环境开发使用group属性设置配置文件分组，便于线上维护管理"><a href="#多环境开发使用group属性设置配置文件分组，便于线上维护管理" class="headerlink" title="多环境开发使用group属性设置配置文件分组，便于线上维护管理"></a>多环境开发使用group属性设置配置文件分组，便于线上维护管理</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">spring:</span><br>	<span class="hljs-attr">profiles:</span><br>    	<span class="hljs-attr">active:</span> <span class="hljs-string">dev</span><br>        <span class="hljs-attr">group:</span><br>        	<span class="hljs-attr">&quot;dev&quot;:</span> <span class="hljs-string">devDB,devRedis,devMVC</span><br>      		<span class="hljs-attr">&quot;pro&quot;:</span> <span class="hljs-string">proDB,proRedis,proMVC</span><br>      		<span class="hljs-attr">&quot;test&quot;:</span> <span class="hljs-string">testDB,testRedis,testMVC</span><br></code></pre></td></tr></table></figure>
+
+
+<p><strong>maven中设置多环境（使用属性方式区分环境）</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">profiles</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">profile</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">id</span>&gt;</span>env_dev<span class="hljs-tag">&lt;/<span class="hljs-name">id</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">properties</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">profile.active</span>&gt;</span>dev<span class="hljs-tag">&lt;/<span class="hljs-name">profile.active</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">properties</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">activation</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">activeByDefault</span>&gt;</span>true<span class="hljs-tag">&lt;/<span class="hljs-name">activeByDefault</span>&gt;</span>		<span class="hljs-comment">&lt;!--默认启动环境--&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">activation</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">profile</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">profile</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">id</span>&gt;</span>env_pro<span class="hljs-tag">&lt;/<span class="hljs-name">id</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">properties</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">profile.active</span>&gt;</span>pro<span class="hljs-tag">&lt;/<span class="hljs-name">profile.active</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">properties</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">profile</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">profiles</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>SpringBoot中读取maven设置值</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">spring:</span><br>	<span class="hljs-attr">profiles:</span><br>    	<span class="hljs-attr">active:</span> <span class="hljs-string">@profile.active@</span><br></code></pre></td></tr></table></figure>
+
+<p>上面的@属性名@就是读取maven中配置的属性值的语法格式。</p>
+<h4 id="idea里的一个bug"><a href="#idea里的一个bug" class="headerlink" title="idea里的一个bug"></a>idea里的一个bug</h4><p>在Idea下测试工程时pom.xml每次更新需要手动compile方可生效</p>
+
             </div>
             <hr>
             <div>
