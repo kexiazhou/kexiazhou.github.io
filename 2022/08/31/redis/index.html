@@ -16,15 +16,15 @@
   <meta name="author" content="KeXia Zhou">
   <meta name="keywords" content="">
   
-    <meta name="description" content="#基础入门 初始Redis认识NoSQL常见的nosql有 mongodb redis elasticsearch 等not only sql  传统关系型数据库是结构化数据 而NoSql则对数据库格式没有严格约束，往往形式松散 传统数据库的表与表之间往往存在关联 而非关系型数据库不存在关联关系123456789101112131415161718&amp;#123;  id: 1,  name: &amp;qu">
+    <meta name="description" content="基础入门初始Redis认识NoSQL常见的nosql有 mongodb redis elasticsearch 等not only sql  传统关系型数据库是结构化数据 而NoSql则对数据库格式没有严格约束，往往形式松散 传统数据库的表与表之间往往存在关联 而非关系型数据库不存在关联关系123456789101112131415161718&amp;#123;  id: 1,  name: &amp;quot">
 <meta property="og:type" content="article">
 <meta property="og:title" content="redis">
 <meta property="og:url" content="https://kexiazhou.github.io/2022/08/31/redis/index.html">
 <meta property="og:site_name" content="周可霞的博客">
-<meta property="og:description" content="#基础入门 初始Redis认识NoSQL常见的nosql有 mongodb redis elasticsearch 等not only sql  传统关系型数据库是结构化数据 而NoSql则对数据库格式没有严格约束，往往形式松散 传统数据库的表与表之间往往存在关联 而非关系型数据库不存在关联关系123456789101112131415161718&amp;#123;  id: 1,  name: &amp;qu">
+<meta property="og:description" content="基础入门初始Redis认识NoSQL常见的nosql有 mongodb redis elasticsearch 等not only sql  传统关系型数据库是结构化数据 而NoSql则对数据库格式没有严格约束，往往形式松散 传统数据库的表与表之间往往存在关联 而非关系型数据库不存在关联关系123456789101112131415161718&amp;#123;  id: 1,  name: &amp;quot">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-08-31T08:10:54.699Z">
-<meta property="article:modified_time" content="2022-10-08T06:11:08.341Z">
+<meta property="article:modified_time" content="2022-10-08T06:27:43.767Z">
 <meta property="article:author" content="KeXia Zhou">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -237,8 +237,7 @@
             <h1 style="display: none">redis</h1>
             
             <div class="markdown-body">
-              <p>#基础入门</p>
-<h2 id="初始Redis"><a href="#初始Redis" class="headerlink" title="初始Redis"></a>初始Redis</h2><h3 id="认识NoSQL"><a href="#认识NoSQL" class="headerlink" title="认识NoSQL"></a>认识NoSQL</h3><p>常见的nosql有 mongodb redis elasticsearch 等<br>not only sql</p>
+              <h1 id="基础入门"><a href="#基础入门" class="headerlink" title="基础入门"></a>基础入门</h1><h2 id="初始Redis"><a href="#初始Redis" class="headerlink" title="初始Redis"></a>初始Redis</h2><h3 id="认识NoSQL"><a href="#认识NoSQL" class="headerlink" title="认识NoSQL"></a>认识NoSQL</h3><p>常见的nosql有 mongodb redis elasticsearch 等<br>not only sql</p>
 <ul>
 <li>传统关系型数据库是结构化数据 而NoSql则对数据库格式没有严格约束，往往形式松散</li>
 <li>传统数据库的表与表之间往往存在关联 而非关系型数据库不存在关联关系<figure class="highlight yaml"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></div></td><td class="code"><pre><code class="hljs yaml">&#123;<br>  <span class="hljs-attr">id:</span> <span class="hljs-number">1</span>,<br>  <span class="hljs-attr">name:</span> <span class="hljs-string">&quot;张三&quot;</span>,<br>  <span class="hljs-attr">orders:</span> [<br>    &#123;<br>       <span class="hljs-attr">id:</span> <span class="hljs-number">1</span>,<br>       <span class="hljs-attr">item:</span> &#123;<br>	 <span class="hljs-attr">id:</span> <span class="hljs-number">10</span>, <span class="hljs-attr">title:</span> <span class="hljs-string">&quot;荣耀6&quot;</span>, <span class="hljs-attr">price:</span> <span class="hljs-number">4999</span><br>       &#125;<br>    &#125;,<br>    &#123;<br>       <span class="hljs-attr">id:</span> <span class="hljs-number">2</span>,<br>       <span class="hljs-attr">item:</span> &#123;<br>	 <span class="hljs-attr">id:</span> <span class="hljs-number">20</span>, <span class="hljs-attr">title:</span> <span class="hljs-string">&quot;小米11&quot;</span>, <span class="hljs-attr">price:</span> <span class="hljs-number">3999</span><br>       &#125;<br>    &#125;<br>  ]<br>&#125;<br></code></pre></td></tr></table></figure></li>
