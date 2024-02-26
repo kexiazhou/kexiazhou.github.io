@@ -24,7 +24,7 @@
 <meta property="og:description" content="带输出参数的存储过程执行1234567BEGINdeclare  @chemReg int;declare  @nonChemReg int;EXEC dbo.reg_stat 1,&amp;#x27;2011-01-01&amp;#x27;,&amp;#x27;2023-01-01&amp;#x27;,1, @chemReg output,@nonChemReg output;select @chemReg;select @n">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-02-27T07:05:13.778Z">
-<meta property="article:modified_time" content="2023-02-27T07:06:35.910Z">
+<meta property="article:modified_time" content="2023-12-28T03:23:17.548Z">
 <meta property="article:author" content="KeXia Zhou">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -196,7 +196,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      201 字
+      2.3k 字
     </span>
   
 
@@ -205,7 +205,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      2 分钟
+      20 分钟
     </span>
   
 
@@ -238,6 +238,56 @@
             
             <div class="markdown-body">
               <h3 id="带输出参数的存储过程执行"><a href="#带输出参数的存储过程执行" class="headerlink" title="带输出参数的存储过程执行"></a>带输出参数的存储过程执行</h3><figure class="highlight sql"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">BEGIN</span><br><span class="hljs-keyword">declare</span>  <span class="hljs-variable">@chemReg</span> <span class="hljs-type">int</span>;<br><span class="hljs-keyword">declare</span>  <span class="hljs-variable">@nonChemReg</span> <span class="hljs-type">int</span>;<br><span class="hljs-keyword">EXEC</span> dbo.reg_stat <span class="hljs-number">1</span>,<span class="hljs-string">&#x27;2011-01-01&#x27;</span>,<span class="hljs-string">&#x27;2023-01-01&#x27;</span>,<span class="hljs-number">1</span>, <span class="hljs-variable">@chemReg</span> output,<span class="hljs-variable">@nonChemReg</span> output;<br><span class="hljs-keyword">select</span> <span class="hljs-variable">@chemReg</span>;<br><span class="hljs-keyword">select</span> <span class="hljs-variable">@nonChemReg</span>;<br><span class="hljs-keyword">end</span>;<br></code></pre></td></tr></table></figure>
+
+
+<h3 id="maven-resources-plugin"><a href="#maven-resources-plugin" class="headerlink" title="maven-resources-plugin"></a>maven-resources-plugin</h3><p><filtering>true</filtering><br>代表替换资源文件中的${}</p>
+<p>插件的编码影响的范围是directory目录</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-params">&lt;resources&gt;</span><br><span class="hljs-params">&lt;resource&gt;</span><br><span class="hljs-params">&lt;directory&gt;</span>src<span class="hljs-meta-keyword">/main/</span>java<span class="hljs-params">&lt;/directory&gt;</span><br><span class="hljs-params">&lt;/resource&gt;</span><br><span class="hljs-params">&lt;/resources&gt;</span><br></code></pre></td></tr></table></figure>
+
+
+<h3 id="namejdbctempalte"><a href="#namejdbctempalte" class="headerlink" title="namejdbctempalte"></a>namejdbctempalte</h3><h4 id="可直接查单列，返回类型必须是匹配的且是包装类"><a href="#可直接查单列，返回类型必须是匹配的且是包装类" class="headerlink" title="可直接查单列，返回类型必须是匹配的且是包装类"></a>可直接查单列，返回类型必须是匹配的且是包装类</h4><p>Double aDouble = jdbcTemplate.queryForObject(sql, params, Double.class);<br>如果没有单行</p>
+<h4 id="多条必须用queryforlist"><a href="#多条必须用queryforlist" class="headerlink" title="多条必须用queryforlist"></a>多条必须用queryforlist</h4><p>Double aDouble = jdbcTemplate.queryForList(sql, params, Double.class);</p>
+<h4 id="tomcat编码"><a href="#tomcat编码" class="headerlink" title="tomcat编码"></a>tomcat编码</h4><p>Tomcat容器默认编码是iso-8859-1<br>影响HttpServletRequest的编码<br><Connector port="8098" protocol="HTTP/1.1"
+connectionTimeout="20000"
+redirectPort="8443" URIEncoding="utf-8"/></p>
+<h4 id="rest接口数据"><a href="#rest接口数据" class="headerlink" title="rest接口数据"></a>rest接口数据</h4><p>对象必须有get set 方法 才能显示</p>
+<h4 id="排序问题"><a href="#排序问题" class="headerlink" title="排序问题"></a>排序问题</h4><p>oracle 按自增序列排序会比较乱  需要新增一个字段作为排序字段</p>
+<h4 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h4><p>@CachePut 更新缓存代码一定执行</p>
+<h4 id="transient"><a href="#transient" class="headerlink" title="transient"></a>transient</h4><p>transient 是不需要序列化的字段</p>
+<h4 id="重写-equals-时为什么一定要重写-hashCode"><a href="#重写-equals-时为什么一定要重写-hashCode" class="headerlink" title="重写 equals 时为什么一定要重写 hashCode"></a>重写 equals 时为什么一定要重写 hashCode</h4><p>这是因为不同对象的 hashCode 可能相同；但 hashCode 不同的对象一定不相等，<br>所以使用 hashCode 可以起到快速初次判断对象是否相等的作用<br>System.out.println(“Aa”.hashCode()+”  “+”BB”.hashCode());<br>2112  2112<br>hashset 去重机制<br>1.比较hashcode是否相同，如果没有重写，两个对象的hashcode必然是不同的，然后就不能去重了<br>2.当hashcode是相同的时候，equals方法还相同，代表两个对象相同，然后就去重复了</p>
+<h4 id="navicat-备份sqlserver-数据库"><a href="#navicat-备份sqlserver-数据库" class="headerlink" title="navicat 备份sqlserver 数据库"></a>navicat 备份sqlserver 数据库</h4><ol>
+<li>生成备份 a1.bak，新建数据库a2</li>
+<li>在刚才的备份文件那里，右键 还原备份</li>
+<li>还原到数据库选a2</li>
+<li>高级 还原到选择a2.ndf a2_log.ndf 勾选覆盖with replace</li>
+</ol>
+<h4 id="sqlserver-identity-insert"><a href="#sqlserver-identity-insert" class="headerlink" title="sqlserver identity_insert"></a>sqlserver identity_insert</h4><p>如果插入的数据包含自增列，必须手动开启和关闭identity_insert<br>set identity_insert table on;<br>insert into xxx  …<br>set identity_insert table off;</p>
+<p>数据库里如果做表数据迁移的话目标表不要设置自增列</p>
+<h4 id="oracle-日期相减得到是天数（小数表示"><a href="#oracle-日期相减得到是天数（小数表示" class="headerlink" title="oracle  日期相减得到是天数（小数表示)"></a>oracle  日期相减得到是天数（小数表示)</h4><p>select (sysdate - time1),time1 from a<br>这里时间相减得到的是多少天（小数表示）</p>
+<h4 id="达梦数据库"><a href="#达梦数据库" class="headerlink" title="达梦数据库"></a>达梦数据库</h4><p>pg 对所有数据库标识符（表名，模式名，列名等）区分大小写<br>sqlserver 默认标识符是不区分大小写的<br>oracle 默认标识符是不区分大小写的<br>dm 默认标识符区分大小写</p>
+<h4 id="mybaits-xml中"><a href="#mybaits-xml中" class="headerlink" title="mybaits xml中"></a>mybaits xml中</h4><ul>
+<li>foreach 书写同pg<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">insert</span> <span class="hljs-keyword">into</span>表A<br>(字段<span class="hljs-number">1</span>,字段<span class="hljs-number">2</span>,字段<span class="hljs-number">3</span>) <span class="hljs-keyword">values</span><br>&lt;<span class="hljs-keyword">foreach</span> collection=&quot;集合名称&quot; item=&quot;param&quot; <span class="hljs-keyword">open</span>=&quot;(&quot; <span class="hljs-keyword">close</span>=&quot;)&quot;<br>separator=&quot;),(&quot;&gt;<br>#&#123;param.对象字段<span class="hljs-number">1</span>&#125;,#&#123;param.对象字段<span class="hljs-number">2</span>&#125;,#&#123;param.对象字段<span class="hljs-number">3</span>&#125;<br>&lt;/<span class="hljs-keyword">foreach</span>&gt;<br></code></pre></td></tr></table></figure></li>
+<li>字符连接 ||  （同pg oracle,  sqlserver使用+）</li>
+<li>关键字 admin call<h4 id="nvm-npm-nrm-yarn-yrm-node"><a href="#nvm-npm-nrm-yarn-yrm-node" class="headerlink" title="nvm npm nrm  yarn yrm node"></a>nvm npm nrm  yarn yrm node</h4></li>
+<li>nvm 管理node 和npm</li>
+<li>npm node.js 的包管理器 安装 node.js 之后自带 npm</li>
+<li>nrm 修改npm源地址 更快得下载包</li>
+<li>yarn 和npm功能差不多</li>
+<li>yrm  和nrm功能差不多</li>
+</ul>
+<h4 id="gradle-全局排除"><a href="#gradle-全局排除" class="headerlink" title="gradle 全局排除"></a>gradle 全局排除</h4><p>configurations.all {<br>    exclude group:’org.springframework.boot’,module:’spring-boot-starter-logging’<br>}</p>
+<h4 id="mybatis-结果集返回List"><a href="#mybatis-结果集返回List" class="headerlink" title="mybatis 结果集返回List"></a>mybatis 结果集返回List<String></h4><collection property="drugs" ofType="java.lang.String" javaType="ArrayList">
+            <result column="drug_name" jdbcType="VARCHAR"/>
+        </collection>
+#### postConstruct 加载
+被@PostConstruct修饰的方法会在服务器加载Servle的时候运行，并且只会被服务器执行一次。PostConstruct在构造函数之后执行
+一般加载顺序
+构造方法 > @Autowired > @PostConstruct
+
+<h4 id="查询报表如果数据量大必须分页或者限定时间"><a href="#查询报表如果数据量大必须分页或者限定时间" class="headerlink" title="查询报表如果数据量大必须分页或者限定时间"></a>查询报表如果数据量大必须分页或者限定时间</h4><h4 id="mybatis-插入多条"><a href="#mybatis-插入多条" class="headerlink" title="mybatis 插入多条"></a>mybatis 插入多条</h4><p>只有第一条数据会有id，后面几天不会自动产生id</p>
+<h4 id="pgsql-跨版本升级"><a href="#pgsql-跨版本升级" class="headerlink" title="pgsql 跨版本升级"></a>pgsql 跨版本升级</h4><p>导出： pg_dump -h 127.0.0.1 -U postgres xiamenzhongyi &gt;D:\1.sql<br>导入： psql -d eoims -U postgre -f 1.sql</p>
+<h4 id="git-合并多次提交"><a href="#git-合并多次提交" class="headerlink" title="git 合并多次提交"></a>git 合并多次提交</h4><p>找到最早一次提交<br>interactively Rebase  from here<br>第二个提交开始都选择fixup<br>第一个提交reword 编辑总的提交信息</p>
+
             </div>
             <hr>
             <div>
@@ -256,6 +306,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2024/02/26/readbook/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">readbook</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
